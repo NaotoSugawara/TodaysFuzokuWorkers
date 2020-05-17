@@ -1,10 +1,7 @@
-# ウェブアプリケーションフレームワーク
-from flask import Flask, render_template
-# スクレイピング用
 import requests
 from bs4 import BeautifulSoup
-# import json
 
+########## LINEへの送信処理 ##########
 def LINE_notify(message):
     def LineNotify(message):
         line_notify_token = "ekHn1eW0wLzLcobprromHYlT7wNXQ6aKT8hY8e6hD9P"
@@ -23,43 +20,20 @@ res = requests.get('https://www.fuzoku-watch.com/yoshiwara/today.html')
 # レスポンスの HTML から BeautifulSoup オブジェクトを作る
 soup = BeautifulSoup(res.text, 'html.parser')
 
+# HTMLから今日の出勤情報を取得
 todayGirlListFromWeb = soup.find_all(class_='girlDetailArea')
 
 todayGirlList = []
+# 一人ずつ情報を抽出する
 for oneGirl in todayGirlListFromWeb:
     name = oneGirl.find(class_='name').text
     age = oneGirl.find(class_='age').text
     measurements = oneGirl.find(class_='measurements').text
     shopGuide = oneGirl.find(class_='shopGuide').text
     girlInfo = "\n・" + name + age + measurements + " \n　店舗:" + shopGuide
+    # 嬢の情報をListに追加する
     todayGirlList.append(girlInfo)
+
+# Listを一つのStringにまとめる
 message = ''.join(todayGirlList)
 LINE_notify(message)
-
-
-
-# for oneGirl in todayGirlList:
-#     name = oneGirl.find(class_='name').text
-#     age = oneGirl.find(class_='age').text
-#     measurements = oneGirl.find(class_='measurements').text
-#     starBox = oneGirl.find(class_='starBox').text
-#     catName = oneGirl.find(class_='catName').text
-#     shopGuide = oneGirl.find(class_='shopGuide').text
-#     print("name:" + name + ",age:" + age + ",measurements:" + measurements + ",starBox:" + starBox + ",catName:" + catName + ",shopGuide:" + shopGuide)
-
-# announcer_name = soup.find_all('p', {'class': 'name-ja'})
-# announcer_img = soup.find_all('img', {'class': ''})
-# woman = announcer_name[0].text
-
-
-########## 画面作成処理 ##########
-# app = Flask(__name__)
-
-# @app.route('/')
-# def hello():
-#     name = len(todayGirlList)
-#     return render_template('hello.html', title='flask test', name=name)
-
-# ## おまじない
-# if __name__ == "__main__":
-#     app.run(debug=True)
