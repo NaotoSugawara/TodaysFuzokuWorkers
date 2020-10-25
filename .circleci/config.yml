@@ -3,16 +3,16 @@ jobs:
     executor: heroku/default
     steps:
       - checkout
-      - heroku/install
-      - run:
-          command: >
-            echo "The command above installs Heroku, the command below deploys.
-            What you do inbetween is up to you!"
+      #- heroku/install
+      #- run:
+          #command: >
+            #echo "The command above installs Heroku, the command below deploys.
+            #What you do inbetween is up to you!"
       - heroku/deploy-via-git
 rbs:
   heroku: circleci/heroku@1.2.2
-version: 2.1
-workflows:
-  heroku_deploy:
-    jobs:
-      - deploy
+#version: 2.1
+#workflows:
+  #heroku_deploy:
+    #jobs:
+      #- deploy
