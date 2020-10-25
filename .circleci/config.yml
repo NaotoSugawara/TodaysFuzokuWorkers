@@ -1,18 +1,34 @@
-jobs:
-  deploy:
-    executor: heroku/default
-    steps:
-      - checkout
+#jobs:
+#  deploy:
+#    executor: heroku/default
+#    steps:
+#      - checkout
       #- heroku/install
       #- run:
           #command: >
             #echo "The command above installs Heroku, the command below deploys.
             #What you do inbetween is up to you!"
-      - heroku/deploy-via-git
-rbs:
-  heroku: circleci/heroku@1.2.2
+#      - heroku/deploy-via-git
+#rbs:
+#  heroku: circleci/heroku@1.2.2
 #version: 2.1
 #workflows:
   #heroku_deploy:
     #jobs:
       #- deploy
+
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@0.0.10. # Invoke the Heroku orb
+
+workflows:
+  heroku_deploy:
+    jobs:
+      - build
+      - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
+          requires:
+            - build
+          filters:
+            branches:
+              only: sequential-branch-filter
